@@ -1,6 +1,6 @@
-from bs4 import BeautifulSoup
-import pandas as pd
-import requests
+#from bs4 import BeautifulSoup
+#import pandas as pd
+#import requests
 from time import sleep
 from datetime import date, timedelta
 import json
@@ -44,47 +44,26 @@ driver.find_element(By.ID,"login-username").send_keys('jim_hendrix@mail.ru')
 driver.find_element(By.ID,"login-password").send_keys('231290qQ')
 driver.find_element(By.ID,"login-button").click()
 sleep(3)
-
+final = []
+dict_ = {}
 for u in url_list:
-    driver.implicitly_wait(5)
+    date = u[56:]
+    #driver.implicitly_wait(5)
     driver.get(u)
+    news_elements = WebDriverWait(driver, timeout=10).until(
+        lambda d: d.find_elements(
+            By.CLASS_NAME, "TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw.styled" \
+            "__StyledTableRow-sc-135veyd-3.lsudt"))    
     
-    news_elements = driver.find_elements(
-        By.CLASS_NAME, "TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw.styled__StyledTableRow-sc-135veyd-3.lsudt")
-    for e in news_elements:
-        print(e.text)
-    print(news_elements)
-    #news_elements_1 = news_elements.find_element(By.TAG_NAME, 'tr')
-    #print(news_elements_1.text)
-    #with open('hight_score.json', 'w') as hs:
-    #        json.dump(news_elements.text, hs)
+    for e in news_elements[:50]:
+        list_ = e.text.split('\n')
+        number = list_[0]
+        musicant = list_[2]
+        final.append((number, musicant))
+    dict_[date] = final
+    print(dict_)
+    with open('chart.json', 'a') as hs:
+        json.dump(dict_, hs)
             
     sleep(2000)
-    
-    
 
-#function for going through each row in each url and finding relevant song info
-'''
-def song_scrape(x):
-    pg = x
-    for tr in songs.find("tbody").findAll("tr"):
-        artist= tr.find("td", {"class": "chart-table-track"}).find("span").text
-        artist= artist.replace("by ","").strip()
-  
-        title= tr.find("td", {"class": "chart-table-track"}).find("strong").text
- 
-        songid= tr.find("td", {"class": "chart-table-image"}).find("a").get("href")
-        songid= songid.split("track/")[1]
-    
-        url_date= x.split("daily/")[1]
-        
-        final.append([title, artist, songid, url_date])
- 
-#convert to data frame with pandas for easier data manipulation
-
-final_df = pd.DataFrame(final, columns= ["Title", "Artist", "Song ID", "Chart Date"])
-
-#write to csv
-
-with open('spmooddata.csv', 'w') as f:
-        final_df.to_csv(f, header= True, index=False)'''
