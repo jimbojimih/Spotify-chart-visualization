@@ -1,80 +1,71 @@
-#from bs4 import BeautifulSoup
-#import pandas as pd
-#import requests
 import csv
 from time import sleep
 from datetime import date, timedelta
-import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-#create empty arrays for data we're collecting
+
+#create empty arrays to fill with addresses
 dates=[]
 url_list=[]
-final = []
 
-#map site
+#base url
 url = "https://charts.spotify.com/charts/view/artist-us-weekly/"
+
+#find the number of weeks to run a cycle
 start_date= date(2021, 10, 21)
 end_date= date(2022, 8, 18)
 delta= end_date-start_date
 delta_week = delta // 7
 
+#complete list of dates
 for i in range(delta_week.days+1):    
-    day = start_date+timedelta(weeks=i)
-    day_string= day.strftime("%Y-%m-%d")
+    day = start_date+timedelta(weeks=i) #add week
+    day_string= day.strftime("%Y-%m-%d") #to string
     dates.append(day_string)
-
+    
+#complete list of urls
 for date in dates:
-    c_string = url+date
-    url_list.append(c_string)
+    url_string = url+date
+    url_list.append(url_string)
 
-#loop through urls to create array of all of our song info
-options = Options()
-options.add_argument('--ignore-certificate-errors')
-options.add_argument('--ignore-ssl-errors')
-driver = webdriver.Chrome(options=options)
+#login to spotify
+driver = webdriver.Chrome()
 driver.get("https://accounts.spotify.com/ru/login")
 driver.find_element(By.ID,"login-username").send_keys('jim_hendrix@mail.ru')
 driver.find_element(By.ID,"login-password").send_keys('231290qQ')
 driver.find_element(By.ID,"login-button").click()
 sleep(3)
-dict_ = {}
-listok = []
-for u in url_list:
-    
-    final = []
-    date = u[56:]
+
+#main page loop
+data_list = [] #create the empty list to fill with lists with data and transfers to csv
+for u in url_list:        
+    date = u[56:] #date string to save to data
     driver.get(u)
+    
+    #loading data, waiting for them to appear
     news_elements = WebDriverWait(driver, timeout=10).until(
         lambda d: d.find_elements(
             By.CLASS_NAME, "TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw.styled" \
-            "__StyledTableRow-sc-135veyd-3.lsudt"))   
+            "__StyledTableRow-sc-135veyd-3.lsudt"))
     
-    for e in news_elements[:10]:
-        list_ = e.text.split('\n')
-        number = list_[0]
-        musicant = list_[2]
-        final.append((number, musicant))
-        mini = []
-        mini.append(number)
-        mini.append(musicant)
-        mini.append(date)
-        listok.append(mini)
-    dict_[date] = final
-with open('chart.csv', 'w',  encoding="utf-8") as f:
-    #fieldnames = ['number', 'musicant', 'date']
-    w = csv.writer(f)
-    w.writerow(['number', 'musicant', 'date'])
-    w.writerows(listok)
-#with open('chart.json', 'a') as hs:
-#    json.dump(dict_, hs)
-
-#with open('chart.csv', 'w') as f:  
-#    w = csv.DictWriter(f, dict_.keys())
-#    w.writeheader()
-#    w.writerow(dict_)
+    #extract data and write in data_list
+    for e in news_elements[:10]: #top 10
+        raw_data = e.text.split('\n')
+        number = raw_data[0]
+        musicant = raw_data[2]
+        data = []
+        data.append(number)
+        data.append(musicant)
+        data.append(date)
+        data_list.append(data)
+        
+#create csv based on list
+with open('chart.csv', 'w') as chart:    
+    w = csv.writer(chart)
+    w.writerow(['number', 'musician', 'date'])
+    w.writerows(data_list)
 
