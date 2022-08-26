@@ -4,11 +4,11 @@ import statistics
 
 class Visualisation():
     '''spotify chart visualization (line and bar)'''
-    def __init__(self, scv_file):
-        self.scv_file = scv_file
+    def __init__(self, csv_file = 'chart.csv'):
+        self.csv_file = csv_file
         
     def _open_csv(self):     
-        self.df = pd.read_csv(self.scv_file)
+        self.df = pd.read_csv(self.csv_file)
         
     def _create_line_chart(self):
         self._open_csv()
@@ -71,10 +71,10 @@ class Visualisation():
         self.fig2.write_html("chart_average.html")
 
 if __name__ == '__main__':
-    vis = Visualisation('chart.csv')
+    vis = Visualisation()
     vis.show_line_chart()
-    vis.show_bar_chart()
-    vis.write_line_chart()
-    vis.write_bar_chart()
+    #vis.show_bar_chart()
+    #vis.write_line_chart()
+    #vis.write_bar_chart()
 
     
