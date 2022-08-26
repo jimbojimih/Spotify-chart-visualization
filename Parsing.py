@@ -17,12 +17,12 @@ url = "https://charts.spotify.com/charts/view/artist-us-weekly/"
 
 #find the number of weeks to run a cycle
 start_date= date(2021, 10, 21)
-end_date= date(2022, 8, 18)
+end_date= date.today()
 delta= end_date-start_date
 delta_week = delta // 7
 
 #complete list of dates
-for i in range(delta_week.days+1):    
+for i in range(delta_week.days):    
     day = start_date+timedelta(weeks=i) #add week
     day_string= day.strftime("%Y-%m-%d") #to string
     dates.append(day_string)
