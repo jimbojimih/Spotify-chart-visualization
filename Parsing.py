@@ -87,6 +87,6 @@ class Parsing():
 
 if __name__ == '__main__':
     #specify your username and password when creating an instance
-    pars = Parsing(login = 'jim_hendrix@mail.ru', password = '231290qQ')
+    pars = Parsing(login = '', password = '')
     pars.create_csv()
   
