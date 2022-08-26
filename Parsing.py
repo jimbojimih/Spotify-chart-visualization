@@ -1,4 +1,3 @@
-# url = "https://charts.spotify.com/charts/view/artist-us-weekly/"
 import csv
 from time import sleep
 from datetime import date, timedelta
@@ -10,8 +9,10 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 
 class Parsing():
-    def __init__(self, csv = 'chart.csv', url = "https://charts.spotify.com/" \
-                 "charts/view/artist-us-weekly/", driver = webdriver.Chrome()):
+    def __init__(self, login, password, csv = 'chart.csv', driver = webdriver.Chrome(), 
+                 url = "https://charts.spotify.com/charts/view/artist-us-weekly/"):
+        self.login = login
+        self.password = password
         self.url = url
         self.csv = csv
         self.driver = driver
@@ -44,8 +45,8 @@ class Parsing():
         '''need for parsing'''
         #driver = webdriver.Chrome()
         self.driver.get("https://accounts.spotify.com/ru/login")
-        self.driver.find_element(By.ID,"login-username").send_keys('jim_hendrix@mail.ru')
-        self.driver.find_element(By.ID,"login-password").send_keys('231290qQ')
+        self.driver.find_element(By.ID,"login-username").send_keys(self.login)
+        self.driver.find_element(By.ID,"login-password").send_keys(self.password)
         self.driver.find_element(By.ID,"login-button").click()
         sleep(3)
 
@@ -56,34 +57,36 @@ class Parsing():
         self.data_list = [] #create the empty list to fill with lists with data and transfers to csv
         for u in self.url_list:        
             self.date = u[56:] #date string to save to data
-            self.driver.get(u)
-    
+            self.driver.get(u)    
             #loading data, waiting for them to appear
-            self.news_elements = WebDriverWait(self.driver, timeout=10).until(
+            self.news_elements = WebDriverWait(self.driver, timeout=50).until(
                 lambda d: d.find_elements(
                     By.CLASS_NAME, "TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw.styled" \
                     "__StyledTableRow-sc-135veyd-3.lsudt"))
-    
-            #extract data and write in data_list
-            for e in self.news_elements[:10]: #top 10
-                self.raw_data = e.text.split('\n')
-                self.number = self.raw_data[0]
-                self.musicant = self.raw_data[2]
-                self.data = []
-                self.data.append(self.number)
-                self.data.append(self.musicant)
-                self.data.append(self.date)
-                self.data_list.append(self.data)
+            self._extract_data()
+            
+    def _extract_data(self):
+        '''extract data from one page'''
+        for e in self.news_elements[:10]: #top 10
+            self.raw_data = e.text.split('\n')
+            self.number = self.raw_data[0]
+            self.musicant = self.raw_data[2]
+            self.data = []
+            self.data.append(self.number)
+            self.data.append(self.musicant)
+            self.data.append(self.date)
+            self.data_list.append(self.data)
 
     def create_csv(self):        
         '''create csv based on list'''
         self._main_loop()
-        with open(self.csv, 'w') as chart:    
+        with open(self.csv, 'w', encoding="utf-8") as chart:    
             self.w = csv.writer(chart)
             self.w.writerow(['number', 'musician', 'date'])
             self.w.writerows(self.data_list)
 
 if __name__ == '__main__':
-    pars = Parsing()
+    #specify your username and password when creating an instance
+    pars = Parsing(login = 'jim_hendrix@mail.ru', password = '231290qQ')
     pars.create_csv()
   

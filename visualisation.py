@@ -73,8 +73,8 @@ class Visualisation():
 if __name__ == '__main__':
     vis = Visualisation()
     vis.show_line_chart()
-    #vis.show_bar_chart()
-    #vis.write_line_chart()
-    #vis.write_bar_chart()
+    vis.show_bar_chart()
+    vis.write_line_chart()
+    vis.write_bar_chart()
 
     
