@@ -1,4 +1,3 @@
-*.html
 *.exe
 *.csv
 __pycache__/
