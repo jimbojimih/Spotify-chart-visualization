@@ -1,5 +1,5 @@
 # spotify-chart-visualization
-Educational project.
+Educational python project.
 Spotify chart data visualization.
 For the program to work, enter your username and password 
 when creating an instance of the class.
