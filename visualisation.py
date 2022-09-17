@@ -54,7 +54,8 @@ class BarVisualisation():
             self.list_of_places=[]
             
             #iterate over the places in the chart for the musician
-            self.csv_filter_by_musician = self.csv[self.csv['musician'] == musician]
+            self.csv_filter_by_musician = self.csv[
+                    self.csv['musician'] == musician]
             
             #save data from column 'number'
             for number in self.csv_filter_by_musician['number']: 
@@ -65,7 +66,7 @@ class BarVisualisation():
                 
             #add data in dict_for_bar_charts
             self.dict_for_bar_charts['average chart position'].append(
-                self.chart_average_round)
+                    self.chart_average_round)
             self.dict_for_bar_charts['musician'].append(musician)
             
     def create_chart(self):
@@ -73,7 +74,7 @@ class BarVisualisation():
         self.fig = px.bar(self.dict_for_bar_charts,
                            y='average chart position', x='musician')
         self.fig.update_xaxes(categoryorder = 'total ascending') #sort   
-        
+                
     def show_chart(self):
         self.fig.show()   
         

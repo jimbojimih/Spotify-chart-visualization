@@ -51,11 +51,11 @@ class Autorization():
     def log_in(self):        
         self.driver.get("https://accounts.spotify.com/ru/login")
         self.driver.find_element(
-            By.ID,"login-username").send_keys(self.login)
+                By.ID,"login-username").send_keys(self.login)
         self.driver.find_element(
-            By.ID,"login-password").send_keys(self.password)
+                By.ID,"login-password").send_keys(self.password)
         self.driver.find_element(
-            By.ID,"login-button").click()
+                By.ID,"login-button").click()
         sleep(3)
         
     def get_driver(self):        
@@ -64,7 +64,6 @@ class Autorization():
     
 class DataExtractor():
     def __init__(self, driver, list_of_urls):
-
         self.driver = driver
         self.list_of_urls = list_of_urls
 
@@ -79,7 +78,7 @@ class DataExtractor():
             search_element = ("TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw."
                              "styled__StyledTableRow-sc-135veyd-3.lsudt")
             self.news_elements = WebDriverWait(self.driver, timeout=50).until(
-                lambda d: d.find_elements(By.CLASS_NAME, search_element))
+                    lambda d: d.find_elements(By.CLASS_NAME, search_element))
             
             self._extract_data_from_one_page()
            
@@ -116,7 +115,7 @@ class CsvCreator():
 if __name__ == '__main__':
     
     url_list_creator = UrlLisCreator(
-        "https://charts.spotify.com/charts/view/artist-us-weekly/")
+            "https://charts.spotify.com/charts/view/artist-us-weekly/")
     url_list_creator.create_list_of_urls()    
     list_of_urls = url_list_creator.get_list_of_urls()
     
