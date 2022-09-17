@@ -76,8 +76,8 @@ class DataExtractor():
             self.driver.get(url)
             
             #loading data, waiting for them to appear
-            search_element = "TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw." \
-                             "styled__StyledTableRow-sc-135veyd-3.lsudt"
+            search_element = ("TableRow__TableRowElement-sc-1kuhzdh-0.bANOpw."
+                             "styled__StyledTableRow-sc-135veyd-3.lsudt")
             self.news_elements = WebDriverWait(self.driver, timeout=50).until(
                 lambda d: d.find_elements(By.CLASS_NAME, search_element))
             
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     url_list_creator.create_list_of_urls()    
     list_of_urls = url_list_creator.get_list_of_urls()
     
-    autorization = Autorization('jim_hendrix@mail.ru', '231290qQ')
+    autorization = Autorization('jim_hendrix@mail.ru', '231290Qq')
     autorization.log_in()
     driver = autorization.get_driver()
     
