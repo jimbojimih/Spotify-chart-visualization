@@ -119,7 +119,7 @@ if __name__ == '__main__':
     url_list_creator.create_list_of_urls()    
     list_of_urls = url_list_creator.get_list_of_urls()
     
-    autorization = Autorization('jim_hendrix@mail.ru', '231290Qq')
+    autorization = Autorization('your login', 'your password')
     autorization.log_in()
     driver = autorization.get_driver()
     
