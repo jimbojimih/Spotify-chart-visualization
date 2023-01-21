@@ -9,3 +9,6 @@ The second graph is the average occupied place in the charts.
 Start parsing.py first, then visualisation.py.
 
 *enter your log and pass for autorization = Autorization('your login', 'your password')
+
+![Image text](https://github.com/jimbojimih/2.Spotify-chart-visualization/blob/main/screen1.jpg)
+![Image text](https://github.com/jimbojimih/2.Spotify-chart-visualization/blob/main/screen2.jpg)
